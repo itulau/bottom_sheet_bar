@@ -20,6 +20,13 @@ class BottomSheetBar extends StatefulWidget {
   /// equal to [height] is added to the bottom of this widget.
   final Widget body;
 
+  /// A [Widget] to display as a handle to limit the dismiss by swipe interaction
+  /// if [locked] is false. If [isDismissable] is false, the interaction must be
+  /// done on the handle to dismiss the expanded bottom sheet, otherwise when
+  /// [expandedHandle] is null the default behavior is used (the whole page
+  /// can be swiped on to dismiss).
+  final Widget? expandedHandle;
+
   /// A function to build the widget displayed when the bottom sheet is
   /// expanded. If the expanded content is scrollable, pass the provided
   /// [ScrollController] to the scrollable widget.
@@ -65,6 +72,7 @@ class BottomSheetBar extends StatefulWidget {
   const BottomSheetBar({
     required this.body,
     required this.expandedBuilder,
+    this.expandedHandle,
     this.collapsed,
     this.controller,
     this.color,
@@ -248,7 +256,18 @@ class _BottomSheetBarState extends State<BottomSheetBar>
                           child: MeasureSize(
                             onChange: (size) =>
                                 setState(() => _expandedSize = size),
-                            child: widget.expandedBuilder(_scrollController),
+                            child: (widget.expandedHandle != null)
+                                ? Column(
+                                    children: [
+                                      widget.expandedHandle!,
+                                      Expanded(
+                                        child: IgnorePointer(
+                                            child: widget.expandedBuilder(
+                                                _scrollController)),
+                                      )
+                                    ],
+                                  )
+                                : widget.expandedBuilder(_scrollController),
                           ),
                         ),
                       ),

@@ -41,6 +41,7 @@ class BottomSheetBarPageState extends State<BottomSheetBarPage> {
           ],
         ),
         body: BottomSheetBar(
+          isDismissable: false,
           backdropColor: Colors.green.withOpacity(0.8),
           locked: _isLocked,
           controller: _bsbController,
@@ -60,6 +61,7 @@ class BottomSheetBarPageState extends State<BottomSheetBarPage> {
               offset: const Offset(0, 0), // changes position of shadow
             ),
           ],
+          expandedHandle: Container(color: Colors.green, height: 100),
           expandedBuilder: (scrollController) {
             final itemList =
                 List<int>.generate(_listSize, (index) => index + 1);
