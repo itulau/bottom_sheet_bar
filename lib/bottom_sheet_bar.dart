@@ -246,12 +246,47 @@ class _BottomSheetBarState extends State<BottomSheetBar>
             ),
 
             /// Expanded widget
-            BottomSheetBarListener(
-              locked: widget.locked,
-              onEnd: () => _eventEnd(_velocityTracker.getVelocity()),
-              onPosition: _velocityTracker.addPosition,
-              onScroll: _eventMove,
-              child: AnimatedBuilder(
+            if (widget.expandedHandle != null)
+              BottomSheetBarListener(
+                locked: widget.locked,
+                onEnd: () => _eventEnd(_velocityTracker.getVelocity()),
+                onPosition: _velocityTracker.addPosition,
+                onScroll: _eventMove,
+                child: AnimatedBuilder(
+                  animation: _animationController,
+                  builder: (context, child) => Align(
+                    alignment: Alignment.bottomCenter,
+                    child: IgnorePointer(
+                      ignoring: _controller.isCollapsed,
+                      child: SafeArea(
+                        child: FadeTransition(
+                          opacity: Tween(begin: -13.0, end: 1.0)
+                              .animate(_animationController),
+                          child: RepaintBoundary(
+                            child: MeasureSize(
+                              onChange: (size) =>
+                                  setState(() => _expandedSize = size),
+                              child: (widget.expandedHandle != null)
+                                  ? Column(
+                                      children: [
+                                        widget.expandedHandle!,
+                                        Expanded(
+                                          child: widget.expandedBuilder(
+                                              _scrollController),
+                                        )
+                                      ],
+                                    )
+                                  : widget.expandedBuilder(_scrollController),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            else
+              AnimatedBuilder(
                 animation: _animationController,
                 builder: (context, child) => Align(
                   alignment: Alignment.bottomCenter,
@@ -265,17 +300,22 @@ class _BottomSheetBarState extends State<BottomSheetBar>
                           child: MeasureSize(
                             onChange: (size) =>
                                 setState(() => _expandedSize = size),
-                            child: (widget.expandedHandle != null)
-                                ? Column(
-                                    children: [
-                                      widget.expandedHandle!,
-                                      Expanded(
-                                        child: widget
-                                            .expandedBuilder(_scrollController),
-                                      )
-                                    ],
-                                  )
-                                : widget.expandedBuilder(_scrollController),
+                            child: Column(
+                              children: [
+                                BottomSheetBarListener(
+                                  locked: widget.locked,
+                                  onEnd: () =>
+                                      _eventEnd(_velocityTracker.getVelocity()),
+                                  onPosition: _velocityTracker.addPosition,
+                                  onScroll: _eventMove,
+                                  child: widget.expandedHandle!,
+                                ),
+                                Expanded(
+                                  child:
+                                      widget.expandedBuilder(_scrollController),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -283,7 +323,6 @@ class _BottomSheetBarState extends State<BottomSheetBar>
                   ),
                 ),
               ),
-            ),
           ],
         ),
       ],
