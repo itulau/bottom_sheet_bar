@@ -262,6 +262,7 @@ class _BottomSheetBarState extends State<BottomSheetBar>
                                       widget.expandedHandle!,
                                       Expanded(
                                         child: GestureDetector(
+                                            behavior: HitTestBehavior.opaque,
                                             onTap: () {
                                               print("tapped");
                                             },
