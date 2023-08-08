@@ -261,7 +261,7 @@ class _BottomSheetBarState extends State<BottomSheetBar>
                                     children: [
                                       widget.expandedHandle!,
                                       Expanded(
-                                        child: IgnorePointer(
+                                        child: AbsorbPointer(
                                             child: widget.expandedBuilder(
                                                 _scrollController)),
                                       )
