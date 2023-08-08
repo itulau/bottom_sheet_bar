@@ -202,16 +202,16 @@ class _BottomSheetBarState extends State<BottomSheetBar>
         ),
 
         /// Collapsed widget
-        BottomSheetBarListener(
-          locked: widget.locked,
-          onEnd: () => _eventEnd(_velocityTracker.getVelocity()),
-          onPosition: _velocityTracker.addPosition,
-          onScroll: _eventMove,
-          child: AnimatedBuilder(
-            animation: _animationController,
-            builder: (context, child) => Stack(
-              children: [
-                Align(
+        Stack(
+          children: [
+            BottomSheetBarListener(
+              locked: widget.locked,
+              onEnd: () => _eventEnd(_velocityTracker.getVelocity()),
+              onPosition: _velocityTracker.addPosition,
+              onScroll: _eventMove,
+              child: AnimatedBuilder(
+                animation: _animationController,
+                builder: (context, child) => Align(
                   alignment: Alignment.bottomCenter,
                   child: IgnorePointer(
                     ignoring: !_controller.isCollapsed,
@@ -242,9 +242,18 @@ class _BottomSheetBarState extends State<BottomSheetBar>
                     ),
                   ),
                 ),
+              ),
+            ),
 
-                /// Expanded widget
-                Align(
+            /// Expanded widget
+            BottomSheetBarListener(
+              locked: widget.locked,
+              onEnd: () => _eventEnd(_velocityTracker.getVelocity()),
+              onPosition: _velocityTracker.addPosition,
+              onScroll: _eventMove,
+              child: AnimatedBuilder(
+                animation: _animationController,
+                builder: (context, child) => Align(
                   alignment: Alignment.bottomCenter,
                   child: IgnorePointer(
                     ignoring: _controller.isCollapsed,
@@ -261,13 +270,8 @@ class _BottomSheetBarState extends State<BottomSheetBar>
                                     children: [
                                       widget.expandedHandle!,
                                       Expanded(
-                                        child: GestureDetector(
-                                            behavior: HitTestBehavior.opaque,
-                                            onTap: () {
-                                              print("tapped");
-                                            },
-                                            child: widget.expandedBuilder(
-                                                _scrollController)),
+                                        child: widget
+                                            .expandedBuilder(_scrollController),
                                       )
                                     ],
                                   )
@@ -278,9 +282,9 @@ class _BottomSheetBarState extends State<BottomSheetBar>
                     ),
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ],
     );
