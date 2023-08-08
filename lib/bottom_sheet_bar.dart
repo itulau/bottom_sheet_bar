@@ -246,7 +246,7 @@ class _BottomSheetBarState extends State<BottomSheetBar>
             ),
 
             /// Expanded widget
-            if (widget.expandedHandle != null)
+            if (widget.expandedHandle == null)
               BottomSheetBarListener(
                 locked: widget.locked,
                 onEnd: () => _eventEnd(_velocityTracker.getVelocity()),
