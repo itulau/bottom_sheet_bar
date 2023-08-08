@@ -261,7 +261,10 @@ class _BottomSheetBarState extends State<BottomSheetBar>
                                     children: [
                                       widget.expandedHandle!,
                                       Expanded(
-                                        child: AbsorbPointer(
+                                        child: GestureDetector(
+                                            onTap: () {
+                                              print("tapped");
+                                            },
                                             child: widget.expandedBuilder(
                                                 _scrollController)),
                                       )
